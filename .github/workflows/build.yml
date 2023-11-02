@@ -1,0 +1,70 @@
+name: Build
+on: workflow_dispatch
+jobs:
+  Windows:
+    permissions:
+      contents: write
+    runs-on: windows-2022
+    steps:
+      - name: Checkout g3log
+        uses: actions/checkout@v4
+        with:
+          repository: KjellKod/g3log
+          ref: 2.3
+          path: g3log
+      - name: Init MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+      - name: Build
+        run: |
+          cd g3log
+          mkdir build
+          cd build
+          cmake ../ -DUSE_DYNAMIC_LOGGING_LEVELS=ON -DENABLE_VECTORED_EXCEPTIONHANDLING=OFF -DENABLE_FATAL_SIGNALHANDLING=OFF
+          cmake --build . --config Debug
+          cmake --install . --config Debug --prefix install/Debug
+          cmake --build . --config Release
+          cmake --install . --config Release --prefix install/Release
+      - name: Generate zip
+        run: |
+          echo ${{ github.sha }} > Release.txt
+          Compress-Archive -Path ./g3log/build/install/*,./Release.txt -DestinationPath g3log.${{ github.ref_name }}.zip
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: g3log.${{ github.ref_name }}.zip
+
+  Linux:
+    permissions:
+      contents: write
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout g3log
+        uses: actions/checkout@v4
+        with:
+          repository: KjellKod/g3log
+          ref: 2.3
+          path: g3log
+      - name: Install deps
+        run: |
+          sudo apt-get -y install gcc-10 g++-10
+          alias gcc='gcc-10'
+          alias g++='g++-10'
+          export CC=`which gcc-10`
+          export CXX=`which gcc-10`
+      - name: Build
+        run: |
+          cd g3log
+          mkdir build
+          cd build
+          cmake .. -B Release -DCMAKE_BUILD_TYPE=Release -DUSE_DYNAMIC_LOGGING_LEVELS=ON -DENABLE_VECTORED_EXCEPTIONHANDLING=OFF -DENABLE_FATAL_SIGNALHANDLING=OFF
+          cmake --build Release
+          cmake --install Release/ --prefix install/Release
+      - name: Generate tar
+        run: |
+          echo ${{ github.sha }} > Release.txt
+          cp Release.txt ./g3log/build/install/Release
+          tar -czvf g3log.linux.${{ github.ref_name }}.tar.gz -C ./g3log/build/install/Release linux
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: g3log.linux.${{ github.ref_name }}.tar.gz
