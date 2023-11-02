@@ -27,11 +27,11 @@ jobs:
       - name: Generate zip
         run: |
           echo ${{ github.sha }} > Release.txt
-          Compress-Archive -Path ./g3log/build/install/*,./Release.txt -DestinationPath g3log.${{ github.ref_name }}.zip
+          Compress-Archive -Path ./g3log/build/install/*,./Release.txt -DestinationPath g3log.win.${{ github.ref_name }}.zip
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: g3log.${{ github.ref_name }}.zip
+          files: g3log.win.${{ github.ref_name }}.zip
 
   Linux:
     permissions:
