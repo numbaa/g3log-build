@@ -91,8 +91,8 @@ jobs:
         run: |
           echo ${{ github.sha }} > Release.txt
           cp Release.txt ./g3log/build/install/Release
-          tar -czvf g3log.macos.${{ github.ref_name }}.tar.gz -C ./g3log/build/install/Release .
+          tar -czvf g3log.mac.${{ github.ref_name }}.tar.gz -C ./g3log/build/install/Release .
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: g3log.macos.${{ github.ref_name }}.tar.gz
+          files: g3log.mac.${{ github.ref_name }}.tar.gz
