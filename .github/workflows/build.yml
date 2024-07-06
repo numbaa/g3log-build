@@ -19,7 +19,7 @@ jobs:
           cd g3log
           mkdir build
           cd build
-          cmake ../ -DUSE_DYNAMIC_LOGGING_LEVELS=ON -DENABLE_VECTORED_EXCEPTIONHANDLING=OFF -DENABLE_FATAL_SIGNALHANDLING=OFF
+          cmake ../ -DUSE_DYNAMIC_LOGGING_LEVELS=ON -DENABLE_VECTORED_EXCEPTIONHANDLING=OFF -DENABLE_FATAL_SIGNALHANDLING=OFF -DG3_SHARED_LIB=OFF
           cmake --build . --config Debug
           cmake --install . --config Debug --prefix install/Debug
           cmake --build . --config Release
@@ -56,7 +56,7 @@ jobs:
           cd g3log
           mkdir build
           cd build
-          cmake .. -B Release -DCMAKE_BUILD_TYPE=Release -DUSE_DYNAMIC_LOGGING_LEVELS=ON -DENABLE_VECTORED_EXCEPTIONHANDLING=OFF -DENABLE_FATAL_SIGNALHANDLING=OFF
+          cmake .. -B Release -DCMAKE_BUILD_TYPE=Release -DUSE_DYNAMIC_LOGGING_LEVELS=ON -DENABLE_VECTORED_EXCEPTIONHANDLING=OFF -DENABLE_FATAL_SIGNALHANDLING=OFF -DG3_SHARED_LIB=OFF
           cmake --build Release
           cmake --install Release/ --prefix install/Release
       - name: Generate tar
@@ -84,7 +84,7 @@ jobs:
           cd g3log
           mkdir build
           cd build
-          cmake .. -B Release -DCMAKE_BUILD_TYPE=Release -DUSE_DYNAMIC_LOGGING_LEVELS=ON -DENABLE_VECTORED_EXCEPTIONHANDLING=OFF -DENABLE_FATAL_SIGNALHANDLING=OFF
+          cmake .. -B Release -DCMAKE_BUILD_TYPE=Release -DUSE_DYNAMIC_LOGGING_LEVELS=ON -DENABLE_VECTORED_EXCEPTIONHANDLING=OFF -DENABLE_FATAL_SIGNALHANDLING=OFF -DG3_SHARED_LIB=OFF
           cmake --build Release
           cmake --install Release/ --prefix install/Release
       - name: Generate tar
